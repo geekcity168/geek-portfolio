@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects - Geek Portfolio{% endblock %}
+
+{% block description %}Explore my portfolio of full-stack development projects, web applications, and creative solutions.{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-16">
+    <!-- Page Header -->
+    <section class="text-center mb-16">
+        <div class="glass-card p-8 max-w-3xl mx-auto">
+            <h1 class="section-title mb-6">My Projects</h1>
+            <p class="text-xl text-white/80 leading-relaxed">
+                A collection of my work showcasing various technologies, creative solutions, and technical expertise.
+                Each project represents a unique challenge and learning experience.
+            </p>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="mb-16">
+        <div class="project-grid">
+            {% for project in projects %}
+                <article class="glass-card project-card">
+                    <div class="overflow-hidden rounded-t-3xl">
+                        {% if project.image %}
+                            <img src="{{ project.image.url }}" alt="{{ project.title }}" class="project-image">
+                        {% else %}
+                            <div class="project-image bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
+                                <i class="fas fa-code text-6xl text-white/50"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Project Status Badge -->
+                        {% if project.is_live %}
+                            <div class="absolute top-4 right-4 bg-green-500/80 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                                <i class="fas fa-circle text-xs mr-1"></i> Live
+                            </div>
+                        {% else %}
+                            <div class="absolute top-4 right-4 bg-orange-500/80 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                                <i class="fas fa-tools text-xs mr-1"></i> In Development
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="project-content">
+                        <h3 class="project-title">{{ project.title }}</h3>
+                        <p class="project-description">{{ project.description }}</p>
+                        
+                        <!-- Technologies Used -->
+                        {% if project.technologies.all %}
+                            <div class="skill-tags mb-4">
+                                {% for tech in project.technologies.all %}
+                                    <span class="skill-tag">{{ tech.name }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Project Stats -->
+                        <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                            <div class="glass p-2 rounded-lg">
+                                <div class="text-sm text-white/60">Created</div>
+                                <div class="font-semibold text-sm">{{ project.created_at|date:"M Y" }}</div>
+                            </div>
+                            <div class="glass p-2 rounded-lg">
+                                <div class="text-sm text-white/60">Type</div>
+                                <div class="font-semibold text-sm">{{ project.category|default:"Web App" }}</div>
+                            </div>
+                            <div class="glass p-2 rounded-lg">
+                                <div class="text-sm text-white/60">Status</div>
+                                <div class="font-semibold text-sm">{% if project.is_live %}Live{% else %}Dev{% endif %}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-wrap gap-2">
+                            <a href="{% url 'project_detail' project.pk %}" class="project-link flex-1 text-center">
+                                <i class="fas fa-eye"></i> Details
+                            </a>
+                            {% if project.repo_url %}
+                                <a href="{{ project.repo_url }}" target="_blank" class="project-link">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            {% endif %}
+                            {% if project.live_url %}
+                                <a href="{{ project.live_url }}" target="_blank" class="project-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="col-span-full">
+                    <div class="glass-card p-12 text-center">
+                        <i class="fas fa-code text-6xl text-white/30 mb-6"></i>
+                        <h3 class="text-2xl font-bold mb-4">No Projects Yet</h3>
+                        <p class="text-xl text-white/80 mb-6">
+                            I'm currently working on some exciting projects. Check back soon!
+                        </p>
+                        <a href="{% url 'contact' %}" class="project-link">
+                            <i class="fas fa-envelope"></i> Get In Touch
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" title="First page">
+                    <i class="fas fa-angle-double-left"></i> First
+                </a>
+                <a href="?page={{ page_obj.previous_page_number }}" title="Previous page">
+                    <i class="fas fa-angle-left"></i> Previous
+                </a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" title="Next page">
+                    Next <i class="fas fa-angle-right"></i>
+                </a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" title="Last page">
+                    Last <i class="fas fa-angle-double-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Call to Action -->
+    <section class="mt-20">
+        <div class="glass-card p-8 text-center max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold mb-4">Like What You See?</h2>
+            <p class="text-lg text-white/80 mb-6">
+                I'm always excited to work on new projects and collaborate with others.
+                Let's build something amazing together!
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'contact' %}" class="btn-primary">
+                    <i class="fas fa-handshake"></i> Start a Project
+                </a>
+                <a href="{% url 'blog_list' %}" class="btn-primary">
+                    <i class="fas fa-blog"></i> Read My Blog
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

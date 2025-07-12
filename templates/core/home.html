@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Geek Portfolio - Jack Samuel | Full Stack Developer{% endblock %}
+
+{% block description %}Full Stack Developer specializing in modern web technologies, AI/ML, and creative solutions.{% endblock %}
+
+{% block extra_head %}
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-6 py-16 text-center">
+        <div class="glass-card p-12 max-w-4xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+                    Jack Samuel
+                </h2>
+                <p class="text-xl md:text-2xl text-white/80 mb-6">
+                    Full Stack Developer & Creative Problem Solver
+                </p>
+                <div class="skill-tags justify-center">
+                    <span class="skill-tag"><i class="fab fa-python"></i> Python</span>
+                    <span class="skill-tag"><i class="fab fa-js"></i> JavaScript</span>
+                    <span class="skill-tag"><i class="fab fa-react"></i> React</span>
+                    <span class="skill-tag"><i class="fab fa-django"></i> Django</span>
+                    <span class="skill-tag"><i class="fas fa-robot"></i> AI/ML</span>
+                    <span class="skill-tag"><i class="fab fa-aws"></i> Cloud</span>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'project_list' %}" class="project-link">
+                    <i class="fas fa-rocket"></i> View My Work
+                </a>
+                <a href="{% url 'contact' %}" class="project-link">
+                    <i class="fas fa-coffee"></i> Let's Connect
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-6">
+        <!-- Featured Projects Section -->
+        <section class="mb-20">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="project-grid">
+                {% for project in projects %}
+                    <article class="glass-card project-card">
+                        <div class="overflow-hidden rounded-t-3xl">
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" alt="{{ project.title }}" class="project-image">
+                            {% else %}
+                                <div class="project-image bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
+                                    <i class="fas fa-code text-6xl text-white/50"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">{{ project.title }}</h3>
+                            <p class="project-description">{{ project.description|truncatewords:25 }}</p>
+                            
+                            <!-- Project Technologies -->
+                            {% if project.technologies %}
+                                <div class="skill-tags mb-4">
+                                    {% for tech in project.technologies.all %}
+                                        <span class="skill-tag">{{ tech.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="flex gap-3">
+                                <a href="{% url 'project_detail' project.pk %}" class="project-link">
+                                    <i class="fas fa-eye"></i> View Details
+                                </a>
+                                {% if project.repo_url %}
+                                    <a href="{{ project.repo_url }}" target="_blank" class="project-link">
+                                        <i class="fab fa-github"></i> Code
+                                    </a>
+                                {% endif %}
+                                {% if project.live_url %}
+                                    <a href="{{ project.live_url }}" target="_blank" class="project-link">
+                                        <i class="fas fa-external-link-alt"></i> Live
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="col-span-full text-center py-16">
+                        <div class="glass-card p-8">
+                            <i class="fas fa-code text-6xl text-white/30 mb-4"></i>
+                            <p class="text-xl text-white/80">Projects coming soon! Stay tuned for amazing work.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="mb-20">
+            <div class="glass-card p-8 max-w-4xl mx-auto">
+                <h2 class="section-title">About Me</h2>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p class="text-lg text-white/80 mb-6 leading-relaxed">
+                            Passionate full-stack developer with expertise in modern web technologies, 
+                            AI/ML, and cloud computing. I love creating innovative solutions that make a difference.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="glass p-4 rounded-lg text-center">
+                                <i class="fas fa-code text-2xl mb-2 text-purple-400"></i>
+                                <p class="font-semibold">Clean Code</p>
+                            </div>
+                            <div class="glass p-4 rounded-lg text-center">
+                                <i class="fas fa-mobile-alt text-2xl mb-2 text-blue-400"></i>
+                                <p class="font-semibold">Responsive</p>
+                            </div>
+                            <div class="glass p-4 rounded-lg text-center">
+                                <i class="fas fa-rocket text-2xl mb-2 text-pink-400"></i>
+                                <p class="font-semibold">Performance</p>
+                            </div>
+                            <div class="glass p-4 rounded-lg text-center">
+                                <i class="fas fa-users text-2xl mb-2 text-green-400"></i>
+                                <p class="font-semibold">User-Focused</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="glass-card p-6 inline-block">
+                            <div class="w-48 h-48 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
+                                <i class="fas fa-user text-6xl text-white/80"></i>
+                            </div>
+                            <p class="text-lg font-semibold">Available for projects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Blog Posts -->
+        <section class="mb-20">
+            <h2 class="section-title">Latest Blog Posts</h2>
+            <div class="blog-list max-w-4xl mx-auto">
+                {% for post in posts %}
+                    <article class="blog-item">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <a href="{% url 'blog_detail' post.slug %}" class="blog-title block mb-2">
+                                    {{ post.title }}
+                                </a>
+                                <p class="text-white/70 mb-2">{{ post.excerpt|default:post.content|truncatewords:20 }}</p>
+                                <div class="flex items-center gap-4 text-sm text-white/60">
+                                    <span class="blog-date">
+                                        <i class="fas fa-calendar"></i> {{ post.created_at|date:"M d, Y" }}
+                                    </span>
+                                    <span>
+                                        <i class="fas fa-clock"></i> 5 min read
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-arrow-right text-white/40"></i>
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="glass-card p-8 text-center">
+                        <i class="fas fa-pen text-4xl text-white/30 mb-4"></i>
+                        <p class="text-xl text-white/80">Blog posts coming soon! I'll be sharing insights about tech, coding, and more.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Contact CTA -->
+        <section class="mb-20">
+            <div class="glass-card p-12 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold mb-4">Let's Work Together</h2>
+                <p class="text-xl text-white/80 mb-8">
+                    Have a project in mind? I'd love to hear about it and help bring your ideas to life.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{% url 'contact' %}" class="project-link text-lg px-8 py-4">
+                        <i class="fas fa-envelope"></i> Get In Touch
+                    </a>
+                    <a href="#" class="project-link text-lg px-8 py-4">
+                        <i class="fas fa-download"></i> Download Resume
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass border-t border-white/20">
+        <div class="container mx-auto px-6 py-8">
+            <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 logo">Geek Portfolio</h3>
+                    <p class="text-white/70">
+                        Crafting digital experiences with passion and precision.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <div class="space-y-2">
+                        <a href="{% url 'project_list' %}" class="block text-white/70 hover:text-white transition">Projects</a>
+                        <a href="{% url 'blog_list' %}" class="block text-white/70 hover:text-white transition">Blog</a>
+                        <a href="{% url 'contact' %}" class="block text-white/70 hover:text-white transition">Contact</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Connect</h4>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#" class="text-white/70 hover:text-white transition text-xl">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-white/70 hover:text-white transition text-xl">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-white/70 hover:text-white transition text-xl">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-white/70 hover:text-white transition text-xl">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/20 mt-8 pt-8 text-center text-white/60">
+                <p>&copy; {{ now|date:"Y" }} Jack Samuel. Crafted with <i class="fas fa-heart text-red-400"></i> and lots of ☕</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.1)';
+            } else {
+                header.style.background = 'var(--glass-primary)';
+            }
+        });
+{% endblock %}
